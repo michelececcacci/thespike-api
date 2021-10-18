@@ -11,12 +11,16 @@ MATCH = "match/"
 RANKINGS = "rankings/"
 NEWS = "news/"
 NEWS_ARCHIVE = "news/archive/"
+FORUMS = "forums/general-discussion/"
 
-months_strings = {1: "january", 2 : "february", 3: "march", 4 : "may", 5: "april", 6: "june", 7 : "july", 8: "august", 9: "september", 10 : "october", 11 : "november" , 12: "december"}
+months_strings = {1: "january", 2 : "february", 3: "march", 
+                4 : "may", 5: "april", 6: "june", 7 : "july", 
+                8: "august", 9: "september", 10 : "october",
+                 11 : "november" , 12: "december"}
 
 def remove_spaces(string):
-    string = string.replace(" ", "") #eliminates whitespaces in score
-    string = string.replace("\n", "") #eliminates newlines in score
+    string = string.replace(" ", "") #eliminates whitespaces 
+    string = string.replace("\n", "") #eliminates newlines 
     return string
 
 #allows bs4 to parse the required address
@@ -55,8 +59,8 @@ def get_match_by_id(id):
     team_2_pred = match_soup.find(class_="team-two-percentage percentage-display").text
     team1_stats_unparsed = match_soup.find(id="allMapsTotalTeamOne")
     team2_stats_unparsed = match_soup.find(id="allMapsTotalTeamTwo")
-    team1_stats = get_team_stats(team1_stats_unparsed)
-    team2_stats = get_team_stats(team2_stats_unparsed)
+    team1_stats = team_match_stats(team1_stats_unparsed)
+    team2_stats = team_match_stats(team2_stats_unparsed)
     match_info = {
         "link": BASE + MATCH + str(id), 
         "id" : id, "event" : event.strip(), 
@@ -66,7 +70,7 @@ def get_match_by_id(id):
     }
     return match_info
 
-def get_team_stats(soup):
+def team_match_stats(soup):
     team_stats = []
     player_names = soup.find_all(class_="single-stat tablestat-f4")
     # player_ratings = soup.find_all(class_="single-stat main-area-alt tablestat-f1 number") # todo this doesn't work because all the various stats have all the same class
@@ -78,7 +82,7 @@ def get_team_stats(soup):
         team_stats.append(playerstats)
     return team_stats
 
-#gets information about the top n, with default to global (as a region). Other regions can be specified
+#gets information about the top n, with default to global (as a region). Other regions can be specified and passed as a string
 def get_top_n(number=30, region=""):
     rankings_soup = get_soup(RANKINGS + region)
     teams = rankings_soup.find_all(class_="single-team-ranking main-colour-background")
@@ -88,7 +92,9 @@ def get_top_n(number=30, region=""):
         team_ranking = remove_spaces(teams[i].find(class_="ranking-position number").text)
         team_roster = remove_spaces(teams[i].find(class_="team-roster").text)
         ranking_points = remove_spaces(teams[i].find(class_="points").text)
-        teams_array.append({"team": team_name, "ranking": int(team_ranking), "roster": team_roster, "points" : int(ranking_points)})
+        form_points = remove_spaces(teams[i].find(class_="form").text)
+        achv_points = remove_spaces(teams[i].find(class_="achievements").text)
+        teams_array.append({"team": team_name, "ranking": int(team_ranking), "roster": team_roster, "points" : int(ranking_points), "form": int(form_points), "achv" :  int(achv_points)})
     return teams_array 
 
 #gets basic info about news  such as title, comments and time passed
@@ -104,13 +110,21 @@ def get_news(year=datetime.now().year, month=datetime.now().month):
         news_array.append({"title": title, "date" : date,"comments":comments, "link": BASE + NEWS + link['href']})
     return news_array
 
+# parses  forum posts
+def get_forum_posts(category):
+    forum_soup = get_soup(FORUMS + str(category))
+    posts = forum_soup.find_all(class_="item main-colour-background element-trim-button")
+    posts_array = []
+    for post in posts:
+        author = remove_spaces(post.find(class_="username").text)
+        title = (post.find(class_="forum-title").text).strip()
+        date = (post.find(class_="date").text).strip()
+        posts_array.append({"title": title, "author" : author, "date": date})
+    return posts_array
+    
+
 def to_json(filename ,object, indent=4):
     f = open(f"{filename}.json", "w")
     json_object = json.dumps(object, indent=indent)
     f.write(json_object)
     f.close()
-
-
-
-dict = get_match_by_id(45568)
-to_json("match", dict)
