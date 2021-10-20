@@ -53,6 +53,8 @@ def get_match_by_id(id):
     match_soup = get_soup(MATCH + str(id))
     banner = match_soup.find(class_="match-single_top-banner main-area-default element-trim-normal")
     event = match_soup.find(class_="event-details").text
+    match_style = match_soup.find(class_="match-style").text
+    date = match_soup.find(class_="match-date").text
     total_score = match_soup.find(class_="match-score number").text
     total_score = remove_spaces(total_score)
     team_1_pred = match_soup.find(class_="team-one-percentage percentage-display").text
@@ -65,6 +67,8 @@ def get_match_by_id(id):
         "link": BASE + MATCH + str(id), 
         "id" : id, "event" : event.strip(), 
         "teams" : match_team_names(banner), "score": total_score, 
+        "date" : date,
+        "match_style": match_style,
         "preds" :[team_1_pred, team_2_pred], 
         "team1Stats": team1_stats, "team2Stats" : team2_stats
     }
@@ -73,12 +77,14 @@ def get_match_by_id(id):
 def team_match_stats(soup):
     team_stats = []
     player_names = soup.find_all(class_="single-stat tablestat-f4")
-    # player_ratings = soup.find_all(class_="single-stat main-area-alt tablestat-f1 number") # todo this doesn't work because all the various stats have all the same class
     player_kdas = soup.find_all(class_="single-stat main-area-alt tablestat-f3 number")
     for i in range(len(player_names)):
+        rating = remove_spaces(soup.find(class_="single-stat main-area-alt tablestat-f1 number").text)
         kda = remove_spaces(player_kdas[i].text)
         kda_list = kda.split('|')
-        playerstats = {"playerName" : player_names[i].text, "kills": kda_list[0],"deaths": kda_list[1], "assists" : kda_list[2]} 
+        playerstats = {"playerName" : player_names[i].text, "rating" : float(rating),
+            "kills": int(kda_list[0]),"deaths": int(kda_list[1]),
+            "assists" : int(kda_list[2])} 
         team_stats.append(playerstats)
     return team_stats
 
@@ -122,6 +128,7 @@ def get_forum_posts(category):
         posts_array.append({"title": title, "author" : author, "date": date})
     return posts_array
     
+
 
 def to_json(filename ,object, indent=4):
     f = open(f"{filename}.json", "w")

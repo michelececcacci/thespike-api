@@ -1,0 +1,82 @@
+[
+    {
+        "team": "Sentinels",
+        "ranking": 1,
+        "roster": "ShahZaM-SicK-zombs-dapr-TenZ",
+        "points": 1000,
+        "form": 333,
+        "achv": 667
+    },
+    {
+        "team": "100Thieves",
+        "ranking": 2,
+        "roster": "Hiko-nitr0-Asuna-Ethan-b0i",
+        "points": 676,
+        "form": 300,
+        "achv": 376
+    },
+    {
+        "team": "Envy",
+        "ranking": 3,
+        "roster": "mummAy-FNS-crashies-Victor-Marved-yay",
+        "points": 647,
+        "form": 288,
+        "achv": 359
+    },
+    {
+        "team": "XSET",
+        "ranking": 4,
+        "roster": "PureR-AYRIN-BcJ-dephh-zekken",
+        "points": 622,
+        "form": 281,
+        "achv": 341
+    },
+    {
+        "team": "Rise",
+        "ranking": 5,
+        "roster": "POISED-neptune-Shanks-Derrek-supamen",
+        "points": 588,
+        "form": 261,
+        "achv": 327
+    },
+    {
+        "team": "FaZeClan",
+        "ranking": 6,
+        "roster": "corey-ZachaREEE-babybay-Rawkus-BabyJ",
+        "points": 563,
+        "form": 259,
+        "achv": 304
+    },
+    {
+        "team": "Version1",
+        "ranking": 7,
+        "roster": "Zellsis-penny-effys-wippie-oderus",
+        "points": 537,
+        "form": 231,
+        "achv": 305
+    },
+    {
+        "team": "TSMFTX",
+        "ranking": 8,
+        "roster": "hazed-WARDELL-Subroza-bang-LeviathanAG",
+        "points": 528,
+        "form": 254,
+        "achv": 274
+    },
+    {
+        "team": "LuminosityGaming",
+        "ranking": 9,
+        "roster": "aproto-moose\u2060-YaBoiDre-dazzLe-TiGG",
+        "points": 517,
+        "form": 243,
+        "achv": 274
+    },
+    {
+        "team": "Gen.GEsports",
+        "ranking": 10,
+        "roster": "gMd-Shawn-koosta-NaturE-Temperature",
+        "points": 469,
+        "form": 245,
+        "achv": 224
+    }
+]

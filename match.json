@@ -1,0 +1,97 @@
+{
+    "link": "https://www.thespike.gg/match/45568",
+    "id": 45568,
+    "event": "GLG x PlayerzZone Invitational -  #2",
+    "teams": [
+        "Team Serenity Black",
+        "Scrounge and Friends"
+    ],
+    "score": "1:2",
+    "date": "September 5, 2021 - 19:00",
+    "match_style": "Best of 3",
+    "preds": [
+        "33%",
+        "67%"
+    ],
+    "team1Stats": [
+        {
+            "playerName": " add3r",
+            "rating": 1.12,
+            "kills": 47,
+            "deaths": 49,
+            "assists": 25
+        },
+        {
+            "playerName": " Aiko",
+            "rating": 1.12,
+            "kills": 49,
+            "deaths": 42,
+            "assists": 15
+        },
+        {
+            "playerName": " Nick",
+            "rating": 1.12,
+            "kills": 39,
+            "deaths": 43,
+            "assists": 25
+        },
+        {
+            "playerName": " Neon",
+            "rating": 1.12,
+            "kills": 43,
+            "deaths": 47,
+            "assists": 9
+        },
+        {
+            "playerName": " Dubbin",
+            "rating": 1.12,
+            "kills": 33,
+            "deaths": 43,
+            "assists": 16
+        }
+    ],
+    "team2Stats": [
+        {
+            "playerName": " valyn",
+            "rating": 1.29,
+            "kills": 61,
+            "deaths": 47,
+            "assists": 9
+        },
+        {
+            "playerName": " BcJ",
+            "rating": 1.29,
+            "kills": 42,
+            "deaths": 35,
+            "assists": 25
+        },
+        {
+            "playerName": " bewd",
+            "rating": 1.29,
+            "kills": 40,
+            "deaths": 39,
+            "assists": 25
+        },
+        {
+            "playerName": " Scrounge",
+            "rating": 1.29,
+            "kills": 33,
+            "deaths": 41,
+            "assists": 16
+        },
+        {
+            "playerName": " GMAN",
+            "rating": 1.29,
+            "kills": 35,
+            "deaths": 33,
+            "assists": 4
+        },
+        {
+            "playerName": " Harmful",
+            "rating": 1.29,
+            "kills": 13,
+            "deaths": 16,
+            "assists": 1
+        }
+    ]
+}
