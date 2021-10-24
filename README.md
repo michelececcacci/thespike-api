@@ -1,35 +1,111 @@
-# thespike-api
-Unofficial JSON API for thespike.gg, the most famous competitive Valorant website.
-This project aims at making esports fans lives easier by getting all kinds of useful infos that can be found on thespike.gg, without the hurdle of having to download 
-and format hundreds of matches. For example, if we wanted to get all the  live matches and their scores, we could simply call the function 
-```python 
+# vlrgg-api
+Unofficial JSON API for the valorant website vlr.gg 
+## Available functions
+* [`get_live_matches()`](#live-matches)
+* [`get_match_by_id()`](#match-by-id)
+* [`get_top_n()`](#get-top-n)
+* [`get_news()`](#get-news)
+
+#### Live matches
+request:
+```python
 get_live_matches()
 ```
-, which returns a result like this:
+Response: 
 ```json
 [
     {
         "teams": [
-            "Fire Flux Esports",
-            "Bonsoir"
-        ],
-        "score": "0:0"
-    },
-    {
-        "teams": [
-            "Team Finest",
-            "SAW"
+            "unsigned",
+            "Rix.GG Thunder"
         ],
         "score": "0:0"
     }
 ]
+
 ```
-## Functions:
+#### Match by id
+Takes the id of the wanted match, and retrieves info about it. Here showing only one player for brevity
+
+request: 
 ```python
-get_live_matches()
-get_top_n(n_teams, region) #gets top n teams in the selected region
-get_match_by_id(id)
-get_news(year, month)
-get_forum_posts(category)
+get_match_by_id(43000)
 ```
-## This project is stil work in progress, so feel free to suggest ways to make it better or make contribution to the codebase!
+```json
+{
+    "link": "https://www.vlr.gg/43000",
+    "id": 43000,
+    "event": "LVP Rising Series #4Playoffs: Semifinals",
+    "teams": [
+        "Giants Gaming",
+        "TENSTAR"
+    ],
+    "score": "0:2",
+    "date": "Thursday, October 21st",
+    "match_style": "Bo3",
+    "players_stats": [
+        {
+            "name": "hoody",
+            "link": "/player/2690/hoody",
+            "kills": 16,
+            "deaths": 14,
+            "assists": 5,
+            "adr": 123.2
+        },
+        {
+            "name": "Fit1nho",
+            "link": "/player/292/fit1nho",
+            "kills": 16,
+            "deaths": 15,
+            "assists": 3,
+            "adr": 104.9
+        }
+    ]
+```
+#### Get top n
+request
+```python
+get_top_n(region="europe")
+```
+```json
+[
+    {
+        "team": "Gambit Esports",
+        "country": "Russia",
+        "ranking": 1,
+        "rating": 2499,
+        "form": 1999,
+        "ach": 500,
+        "streak": "4W"
+    },
+    {
+        "team": "Team Liquid",
+        "country": "Europe",
+        "ranking": 2,
+        "rating": 2319,
+        "form": 2000,
+        "ach": 319,
+        "streak": "4W"
+    }
+]
+```
+
+#### Get news
+request:
+```python
+get_news()
+```
+Response: 
+```json
+[
+    {
+        "title": "Alliance, CLG Red, Gamelanders - News Almost Missed October 22",
+        "description": "This week's edition of News Almost Missed comes with a healthy scoop of stories from around the world.",
+        "link": "/47125/alliance-clg-red-gamelanders-news-almost-missed-october-22",
+        "author": " by Hudsen",
+        "date": " October 23, 2021 "
+    }
+]
+
+```
+### This project is still work in progress, so feel free to suggest ways to make it better or make contribution to the codebase!
