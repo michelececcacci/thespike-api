@@ -129,7 +129,8 @@ def get_news(page=1):
                            "author" : rm_tabs_newlines(bot_row[2]), "date" : bot_row[1]})
     return news_array
 
-def get_player_stats(id):
+#gets player infos from personal page
+def get_player_infos(id):
     player_soup = get_soup(PLAYER +  str(id))
     header = player_soup.find(class_="wf-card mod-header mod-full") 
     name = header.find(class_="wf-title").text
@@ -137,9 +138,12 @@ def get_player_stats(id):
     twitter_link =  header.find("a", href=True)
     twitch_link =  header.find_next("a", href=True)
     country = header.find_all("div")
-    player_stats = {"name": rm_tabs_newlines(name), "real_name" : real_name, 
+    return  {"name": rm_tabs_newlines(name), "real_name" : real_name, 
                     "twitter" : twitter_link["href"], "twitch" : twitch_link["href"], 
                     "country": rm_tabs_newlines(country[6].text)}
+
+#returns array of last 50 matches played by player given the id
+def get_player_matches_by_id(id):
     player_matches_soup = get_soup(PLAYER + MATCHES + str(id))
     matches_stats  = []
     matches = player_matches_soup.find_all(class_="wf-card", href=True)
@@ -151,14 +155,10 @@ def get_player_stats(id):
         team1 = rm_tabs_newlines(divs[3].text) 
         team2 = rm_tabs_newlines(divs[10].text)
         matches_stats.append({"link": match["href"],"score" : score, "date" : date, "teams": [team1.split("#")[0] ,team2.split("#")[0]]})
-    player_stats["matches"] = matches_stats
-    return player_stats 
-
+    return matches_stats
+    
 def to_json(filename ,object, indent=4):
     f = open(f"{filename}.json", "w")
     json_object = json.dumps(object, indent=indent)
     f.write(json_object)
     f.close()
-
-dict = get_news()
-to_json("news", dict)
