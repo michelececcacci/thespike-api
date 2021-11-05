@@ -1,28 +1,42 @@
 # vlrgg-api
 Unofficial JSON API for the valorant website vlr.gg 
+
+## installation:
+clone the repo  and install the package locally with respectively: 
+```
+git clone git@github.com:michelececcacci/vlrgg-api.git
+cd vlrgg-api
+sudo python3 -m pip install ./
+```
+Then, you can simply import the package anywhere with 
+```python3 
+from vlrggapi import vlrggapi
+```
 ## Available functions
-* [`get_live_matches()`](#live-matches)
+* [`get_matches_by_status`](#matches-by-status)
 * [`get_match_by_id()`](#match-by-id)
 * [`get_top_n()`](#get-top-n)
 * [`get_news()`](#get-news)
 
-#### Live matches
+#### Matches by status
 request:
 ```python
-get_live_matches()
+get_matches_by_status("live")
 ```
 Response: 
 ```json
 [
     {
         "teams": [
-            "unsigned",
-            "Rix.GG Thunder"
+            "Gamelanders Purple",
+            "Try eSports"
         ],
+        "time": "9:00 PM",
+        "series": "Main Event\u2013Upper Quarterfinals",
+        "tournament": "Protocolo: Evolu\u00e7\u00e3o",
         "score": "0:0"
     }
 ]
-
 ```
 #### Match by id
 Takes the id of the wanted match, and retrieves info about it. Here showing only one player for brevity

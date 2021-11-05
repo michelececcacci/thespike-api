@@ -1,9 +1,12 @@
+from json import encoder
 import bs4
 import logging
 import json
 import requests
 from requests.api import request
 from datetime import date, datetime
+
+from requests.models import encode_multipart_formdata
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -29,28 +32,36 @@ def get_soup(address):
     return soup
 
 def match_team_names(soup):
-    team_names = [name.text for name in soup.find_all(class_="match-item-vs-team-name")]
+    team_names = [name.text for name in soup.find_all(class_="match-item-vs-team-name")] 
     return (team_names[0], team_names[1])
 
 #returns scores about live matches 
-def get_live_matches():
+def get_matches_by_status(status):
     matches_soup = get_soup(MATCHES)
-    live_matches = matches_soup.find_all(class_="wf-module-item match-item mod-color mod-left mod-bg-after- mod-first")
-    live_matches_results = []
+    live_matches = matches_soup.find_all(class_="wf-module-item") 
+    matches_by_status = []
     for match in live_matches:
-        #if match is not live, there is no point in checking further
+        #checks if there is any match with the corresponding status
         match_status = rm_tabs_newlines(match.find(class_="ml-status").text) 
-        if  match_status != "LIVE":
-            break
-        scores = match.find_all(class_="match-item-vs-team-score")
-        single_match = ({"teams" : [rm_tabs_newlines(team) for team in match_team_names(match)] ,
-                         "score" : rm_tabs_newlines(scores[0].text) + ":" + rm_tabs_newlines(scores[1].text)} )
-        live_matches_results.append(single_match)
-    #if the match between the first 2 teams playing is null, it means that no teams are playing at the moment. 
-    if (len(live_matches_results) == 0):
-        return "No live matches at the moment"
+        if  match_status.lower() != status:
+            pass
+        else:
+            scores = match.find_all(class_="match-item-vs-team-score")
+            series = rm_tabs_newlines(match.find(class_="match-item-event-series").text)
+            single_match = {"teams" : [rm_tabs_newlines(team) for team in match_team_names(match)], 
+                            "time" :  rm_tabs_newlines(match.find(class_="match-item-time").text),
+                            # grabs info about the tournament, 
+                            "series" : series,
+                            #since there is no way to get the tournament directly, first it grabs tournament and series, then removes the series
+                            "tournament": rm_tabs_newlines(match.find(class_="match-item-event").text).replace(series, "")
+                            } 
+            if (status == "live"):
+                single_match["score"] = rm_tabs_newlines(scores[0].text) + ":" + rm_tabs_newlines(scores[1].text)
+            matches_by_status.append(single_match)
+    if (len(matches_by_status) == 0):
+        return f"No {status} matches at the moment"
     else:
-        return live_matches_results
+        return matches_by_status
     
 
 #returns useful information on a match, given the id
