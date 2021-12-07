@@ -5,38 +5,39 @@ import json
 import requests
 from requests.api import request
 from datetime import date, datetime
+import typing
 
 from requests.models import encode_multipart_formdata
 
 
 logging.basicConfig(level=logging.DEBUG)
 
-BASE = "https://www.vlr.gg/"
-MATCHES = "matches/"
-RANKINGS = "rankings/"
-NEWS = "news/"
-FORUMS = "forum/"
-PLAYER = "player/"
+BASE: str = "https://www.vlr.gg/"
+MATCHES: str = "matches/"
+RANKINGS: str= "rankings/"
+NEWS: str = "news/"
+FORUMS: str = "forum/"
+PLAYER: str = "player/"
 
-def rm_tabs_newlines(string):
+def rm_tabs_newlines(string: str)-> str:
     string = string.replace("\n", "") #eliminates newlines 
     string = string.replace("\t", "") #eliminates tabs
     return string
 
 #allows bs4 to parse the required address
-def get_soup(address):
-    request_link = BASE + address
+def get_soup(address :str):
+    request_link: str = BASE + address
     re = requests.get(request_link)
     logging.debug("requesting url: " + request_link + " : " + str(re))
     soup  = bs4.BeautifulSoup(re.content, 'lxml')
     return soup
 
-def match_team_names(soup):
+def match_team_names(soup)-> tuple:
     team_names = [name.text for name in soup.find_all(class_="match-item-vs-team-name")] 
     return (team_names[0], team_names[1])
 
-#returns scores about live matches 
-def get_matches_by_status(status):
+#returns scores about live or past matches 
+def get_matches_by_status(status: str):
     matches_soup = get_soup(MATCHES)
     live_matches = matches_soup.find_all(class_="wf-module-item") 
     matches_by_status = []
@@ -66,14 +67,14 @@ def get_matches_by_status(status):
 
 #returns useful information on a match, given the id
 #should work, but needs to add check if the matches are actually being played live
-def get_match_by_id(id):
+def get_match_by_id(id: int)-> dict:
     match_soup = get_soup(str(id))
     event = match_soup.find(class_="match-header-event").text
     match_style = rm_tabs_newlines(match_soup.find_all(class_="match-header-vs-note")[1].text)
     date = rm_tabs_newlines(match_soup.find(class_="moment-tz-convert").text)
     total_score = rm_tabs_newlines(match_soup.find(class_="js-spoiler").text)
     teams = [rm_tabs_newlines(result.text) for result in match_soup.find_all(class_="wf-title-med")]
-    match_info = {
+    match_info: dict = {
         "link": BASE + str(id), 
         "id" : id, "event" : rm_tabs_newlines(event), 
         "teams" : teams, "score": total_score, 
@@ -107,7 +108,7 @@ def team_match_stats(soup):
     return match_stats
 
 #gets information about the top n, with default to global (as a region). Other regions can be specified and passed as a string
-def get_top_n(number=30, region=""):
+def get_top_n(number: int=30, region: str=""):
     rankings_soup = get_soup(RANKINGS + region)
     teams = rankings_soup.find_all(class_="rank-item wf-card fc-flex")
     teams_array = []
@@ -141,7 +142,7 @@ def get_news(page=1):
     return news_array
 
 #gets player infos from personal page
-def get_player_infos(id):
+def get_player_infos(id: int):
     player_soup = get_soup(PLAYER +  str(id))
     header = player_soup.find(class_="wf-card mod-header mod-full") 
     name = header.find(class_="wf-title").text
@@ -154,7 +155,7 @@ def get_player_infos(id):
                     "country": rm_tabs_newlines(country[6].text)}
 
 #returns array of last 50 matches played by player given the id
-def get_player_matches_by_id(id):
+def get_player_matches_by_id(id: int):
     player_matches_soup = get_soup(PLAYER + MATCHES + str(id))
     matches_stats  = []
     matches = player_matches_soup.find_all(class_="wf-card", href=True)
@@ -168,7 +169,7 @@ def get_player_matches_by_id(id):
         matches_stats.append({"link": match["href"],"score" : score, "date" : date, "teams": [team1.split("#")[0] ,team2.split("#")[0]]})
     return matches_stats
     
-def to_json(filename ,object, indent=4):
+def to_json(filename: str , object: dict, indent=4):
     f = open(f"{filename}.json", "w")
     json_object = json.dumps(object, indent=indent)
     f.write(json_object)
