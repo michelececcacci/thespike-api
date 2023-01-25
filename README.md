@@ -1,16 +1,16 @@
-# vlrgg-api
+# thespike-api
 Unofficial JSON API for the valorant website vlr.gg 
 
 ## installation:
 clone the repo  and install the package locally with respectively: 
 ```
-git clone git@github.com:michelececcacci/vlrgg-api.git
-cd vlrgg-api
+git clone git@github.com:michelececcacci/thespike-api.git
+cd thespike-api
 sudo python3 -m pip install ./
 ```
 Then, you can simply import the package anywhere with 
 ```python3 
-from vlrggapi import vlrggapi
+from thespikeapi import thespikeapi
 ```
 ## Available functions
 * [`get_matches_by_status`](#matches-by-status)
